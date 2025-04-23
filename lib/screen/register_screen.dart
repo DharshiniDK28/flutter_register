@@ -1,9 +1,11 @@
+import 'package:app2/router_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app2/Register_bloc/register_bloc.dart';
 import 'package:app2/data/repositories/register_repository.dart';
 import 'package:app2/form_bloc/form_submission_status.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -114,7 +116,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<RegisterBloc, RegisterState>(
@@ -122,9 +123,11 @@ class _RegisterFormState extends State<RegisterForm> {
         if (state.formStatus is SubmissionSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Registration Successful!')));
+          context.go('/home');
         } else if (state.formStatus is SubmissionFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Registration Failed')));
+          context.go('/home');
         }
       },
       builder: (context, state) {
@@ -265,8 +268,10 @@ class _RegisterFormState extends State<RegisterForm> {
                     child: Text('Register', style: TextStyle(color: Colors.white)),
                   ),
                 ),
+
                 if (state.formStatus is FormSubmitting)
                   CircularProgressIndicator(),
+
               ],
             ),
           ),
