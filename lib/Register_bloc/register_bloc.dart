@@ -63,6 +63,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       emit(state.copyWith(formStatus: const FormSubmitting()));
 
       try {
+        await Future.delayed(Duration(seconds: 3));
+
         final address = Address(
           street: state.street,
           state: state.state,
@@ -79,6 +81,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           about: state.about,
           terms: state.termsAccepted,
         );
+
+
         final success = await registerRepository.register(registerRequest);
 
         if (success) {

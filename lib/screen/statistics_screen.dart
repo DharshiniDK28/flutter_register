@@ -237,58 +237,65 @@ class _MyCountryTabState extends State<MyCountryTab> {
                 ],
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
+              Expanded(
+                child: TabBarView(
                   children: [
-                    Row(
+                    SingleChildScrollView(
+                      child:
+                      Column(
                       children: [
-                        Expanded(
-                          child: StatsCard(
-                            title: "Affected",
-                            color: Colors.orange,
-                            value: '${dataFetch.affected}',
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StatsCard(
+                                title: "Affected",
+                                color: Colors.orange,
+                                value: '${dataFetch.affected}',
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StatsCard(
+                                title: "Death",
+                                color: Colors.red,
+                                value: '${dataFetch.death}',
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: StatsCard(
-                            title: "Death",
-                            color: Colors.red,
-                            value: '${dataFetch.death}',
-                          ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: StatsCard(
+                                title: "Recovered",
+                                color: Colors.green,
+                                value: '${dataFetch.recovered}',
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StatsCard(
+                                title: "Active",
+                                color: Colors.blue,
+                                value: '${dataFetch.active}',
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: StatsCard(
+                                title: "Serious",
+                                color: Colors.purple,
+                                value: '${dataFetch.active}',
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: StatsCard(
-                            title: "Recovered",
-                            color:Colors.green,
-                            value: '${dataFetch.recovered}',
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: StatsCard(
-                            title: "Active",
-                            color: Colors.blue,
-                            value: '${dataFetch.active}',
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: StatsCard(
-                            title: "Serious",
-                            color: Colors.purple,
-                            value: '${dataFetch.active}',
-                          ),
-                        ),
-
-                      ],
                     ),
+                    Center(child: Text("Today's data goes here")),
+                    Center(child: Text("Yesterday's data goes here")),
                   ],
                 ),
               ),

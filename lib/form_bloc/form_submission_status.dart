@@ -12,6 +12,9 @@ class InitialFormStatus extends FormSubmissionStatus{
 class FormEditing extends FormSubmissionStatus{
    const FormEditing();
 }
+class FormLoading extends FormSubmissionStatus{
+   const FormLoading();
+}
 
 class FormSubmitting extends FormSubmissionStatus{
     const FormSubmitting();
