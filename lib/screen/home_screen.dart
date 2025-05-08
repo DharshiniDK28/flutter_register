@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+
 import 'statistics_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: const Color(0xFFF6F7FB),
+          drawer: const AppDrawer(), // Added drawer
           body: SlotLayout(
             config: <Breakpoint, SlotLayoutConfig>{
               Breakpoints.small: SlotLayout.from(
@@ -29,22 +31,10 @@ class HomeScreen extends StatelessWidget {
                       unselectedItemColor: Colors.grey,
                       onTap: (idx) => context.read<HomeBloc>().add(PageTapped(index: idx)),
                       items: const [
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.home),
-                          label: "Home",
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.bar_chart),
-                          label: "Bar Chart",
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.newspaper),
-                          label: "Newspaper",
-                        ),
-                        BottomNavigationBarItem(
-                          icon: Icon(Icons.info),
-                          label: "Info",
-                        ),
+                        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+                        BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: "Bar Chart"),
+                        BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: "News"),
+                        BottomNavigationBarItem(icon: Icon(Icons.info), label: "Info"),
                       ],
                     ),
                   ],
@@ -59,22 +49,10 @@ class HomeScreen extends StatelessWidget {
                       onDestinationSelected: (idx) => context.read<HomeBloc>().add(PageTapped(index: idx)),
                       labelType: NavigationRailLabelType.selected,
                       destinations: const [
-                        NavigationRailDestination(
-                          icon: Icon(Icons.home),
-                          label: Text('Home'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.bar_chart),
-                          label: Text('Bar Chart'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.newspaper),
-                          label: Text('Newspaper'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.info),
-                          label: Text('Info'),
-                        ),
+                        NavigationRailDestination(icon: Icon(Icons.home), label: Text('Home')),
+                        NavigationRailDestination(icon: Icon(Icons.bar_chart), label: Text('Bar Chart')),
+                        NavigationRailDestination(icon: Icon(Icons.newspaper), label: Text('News')),
+                        NavigationRailDestination(icon: Icon(Icons.info), label: Text('Info')),
                       ],
                     ),
                     const VerticalDivider(thickness: 1, width: 1),
@@ -97,12 +75,51 @@ class HomeScreen extends StatelessWidget {
   ];
 }
 
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: const [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+            ),
+            child: Text(
+              'Menu',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Settings'),
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Logout'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CovidTopSection extends StatelessWidget {
   const CovidTopSection({super.key});
 
-  static const List<String> countries = ['India', 'USA', 'UK'];
+  static const List<String> countries = ['IND', 'USA', 'UK'];
   static const Map<String, String> countryFlags = {
-    'India': 'assets/india.png',
+    'IND': 'assets/india.png',
     'USA': 'assets/flag.png',
     'UK': 'assets/UK.png',
   };
@@ -131,11 +148,16 @@ class CovidTopSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.short_text, color: Colors.white),
-                        Icon(Icons.notifications_none, color: Colors.white),
+                        Builder(
+                          builder: (context) => IconButton(
+                            icon: const Icon(Icons.short_text, color: Colors.white),
+                            onPressed: () => Scaffold.of(context).openDrawer(),
+                          ),
+                        ),
+                        const Icon(Icons.notifications_none, color: Colors.white),
                       ],
                     ),
                     const SizedBox(height: 30),
@@ -280,17 +302,11 @@ class CovidTopSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     children: const [
-                      PreventionItem(
-                          imagePath: 'assets/img1.png',
-                          label: 'Avoid Close\nContact'),
+                      PreventionItem(imagePath: 'assets/img1.png', label: 'Avoid Close\nContact'),
                       SizedBox(width: 20),
-                      PreventionItem(
-                          imagePath: 'assets/img2.png',
-                          label: 'Clean your\nhands often'),
+                      PreventionItem(imagePath: 'assets/img2.png', label: 'Clean your\nhands often'),
                       SizedBox(width: 20),
-                      PreventionItem(
-                          imagePath: 'assets/img3.png',
-                          label: 'Wear a\nface mask'),
+                      PreventionItem(imagePath: 'assets/img3.png', label: 'Wear a\nface mask'),
                     ],
                   ),
                 ),
@@ -301,15 +317,9 @@ class CovidTopSection extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: const [
-                        PreventionItem(
-                            imagePath: 'assets/img1.png',
-                            label: 'Avoid Close\nContact'),
-                        PreventionItem(
-                            imagePath: 'assets/img2.png',
-                            label: 'Clean your\nhands often'),
-                        PreventionItem(
-                            imagePath: 'assets/img3.png',
-                            label: 'Wear a\nface mask'),
+                        PreventionItem(imagePath: 'assets/img1.png', label: 'Avoid Close\nContact'),
+                        PreventionItem(imagePath: 'assets/img2.png', label: 'Clean your\nhands often'),
+                        PreventionItem(imagePath: 'assets/img3.png', label: 'Wear a\nface mask'),
                       ],
                     ),
                   ),

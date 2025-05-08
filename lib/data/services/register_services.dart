@@ -35,7 +35,7 @@ import 'package:app2/data/models/register_model.dart';
 
 class RegisterService {
   Future<bool> registerUser(RegisterRequestModel model) async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 3));
     print("Mock registration data: ${model.toJson()}");
     return true;
   }

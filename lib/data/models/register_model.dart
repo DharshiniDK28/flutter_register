@@ -3,26 +3,36 @@ import 'package:json_annotation/json_annotation.dart';
 part 'register_model.g.dart';
 
 @JsonSerializable()
-class RegisterRequestModel{
-  @JsonKey(name:'name')
+class RegisterRequestModel {
+  @JsonKey(name: 'name')
   final String name;
+
   @JsonKey(name: 'email')
   final String email;
+
   @JsonKey(name: 'phone')
   final String phone;
+
   @JsonKey(name: 'dob')
   final String dob;
+
   @JsonKey(name: 'gender')
   final String gender;
+
   @JsonKey(name: 'password')
   final String password;
+
+  @JsonKey(name: 'confirmPassword')
+  final String confirmPassword;  // Added confirmPassword
+
   @JsonKey(name: 'address')
-  final String address;
+  final Address address;
+
   @JsonKey(name: 'about')
   final String about;
+
   @JsonKey(name: 'terms')
   final bool terms;
-
 
   RegisterRequestModel({
     required this.name,
@@ -31,14 +41,15 @@ class RegisterRequestModel{
     required this.dob,
     required this.gender,
     required this.password,
+    required this.confirmPassword,  // Added confirmPassword in constructor
     required this.address,
     required this.about,
-    required this.terms
+    required this.terms,
+  });
 
-});
-  factory RegisterRequestModel.fromJson(Map<String,dynamic>json)=>_$RegisterRequestModelFromJson(json);
+  factory RegisterRequestModel.fromJson(Map<String, dynamic> json) => _$RegisterRequestModelFromJson(json);
 
-  Map<String,dynamic>toJson()=>_$RegisterRequestModelToJson(this);
+  Map<String, dynamic> toJson() => _$RegisterRequestModelToJson(this);
 }
 
 @JsonSerializable()
@@ -50,10 +61,10 @@ class Address {
   Address({
     required this.street,
     required this.state,
-    required this.country
+    required this.country,
   });
 
-  factory Address.fromJson(Map<String, dynamic>json)=> _$AddressFromJson(json);
+  factory Address.fromJson(Map<String, dynamic> json) => _$AddressFromJson(json);
 
   Map<String, dynamic> toJson() => _$AddressToJson(this);
 }

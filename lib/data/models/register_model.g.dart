@@ -15,7 +15,8 @@ RegisterRequestModel _$RegisterRequestModelFromJson(
   dob: json['dob'] as String,
   gender: json['gender'] as String,
   password: json['password'] as String,
-  address: json['address'] as String,
+  confirmPassword: json['confirmPassword'] as String,
+  address: Address.fromJson(json['address'] as Map<String, dynamic>),
   about: json['about'] as String,
   terms: json['terms'] as bool,
 );
@@ -29,6 +30,7 @@ Map<String, dynamic> _$RegisterRequestModelToJson(
   'dob': instance.dob,
   'gender': instance.gender,
   'password': instance.password,
+  'confirmPassword': instance.confirmPassword,
   'address': instance.address,
   'about': instance.about,
   'terms': instance.terms,

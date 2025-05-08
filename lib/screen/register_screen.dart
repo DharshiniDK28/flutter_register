@@ -1,3 +1,5 @@
+import 'package:app2/Register_bloc/register_event.dart';
+import 'package:app2/Register_bloc/register_state.dart';
 import 'package:app2/router_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,12 +35,20 @@ class RegisterScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _buildProfilePicture(),
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Profile Picture',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                      Container(
+                        width: 160,
+                        height: 160,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.deepPurple, width: 3),
+                        ),
+                        child: ClipOval(
+                          child: Image.asset('assets/profile.png', fit: BoxFit.cover),
+                        ),
                       ),
+                      const SizedBox(height: 20),
+                      const Text('Profile Picture', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 20),
                       RegisterForm(),
                     ],
                   ),
@@ -56,12 +66,19 @@ class RegisterScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildProfilePicture(),
-                          const SizedBox(height: 20),
-                          const Text(
-                            'Profile Picture',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Container(
+                            width: 160,
+                            height: 160,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.deepPurple, width: 3),
+                            ),
+                            child: ClipOval(
+                              child: Image.asset('assets/profile.png', fit: BoxFit.cover),
+                            ),
                           ),
+                          const SizedBox(height: 20),
+                          const Text('Profile Picture', style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -81,18 +98,6 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildProfilePicture() => Container(
-    width: 160,
-    height: 160,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(color: Colors.deepPurple, width: 3),
-    ),
-    child: ClipOval(
-      child: Image.asset('assets/profile.png', fit: BoxFit.cover),
-    ),
-  );
 }
 
 class RegisterForm extends StatefulWidget {
@@ -104,7 +109,6 @@ class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
-  bool _genderError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -112,12 +116,12 @@ class _RegisterFormState extends State<RegisterForm> {
       listener: (context, state) {
         if (state.formStatus is SubmissionSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Registration Successful!'))
+            const SnackBar(content: Text('Registration Successful!')),
           );
           context.go('/home');
         } else if (state.formStatus is SubmissionFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Registration Failed'))
+            const SnackBar(content: Text('Registration Failed')),
           );
         }
       },
@@ -130,168 +134,230 @@ class _RegisterFormState extends State<RegisterForm> {
                 opacity: state.formStatus is FormSubmitting ? 0.5 : 1.0,
                 child: Form(
                   key: _formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        const SizedBox(height: 20),
-                        _buildInputField(
-                          label: 'Name',
-                          icon: Icons.person,
-                          initialValue: state.name,
-                          onChanged: (v) =>
-                              context.read<RegisterBloc>().add(NameChanged(v)),
-                          validator: (v) =>
-                          v!.isEmpty
-                              ? 'Name is required'
-                              : null,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TextFormField(
+                            initialValue: state.name,
+                            decoration: InputDecoration(
+                              labelText: 'Name',
+                              prefixIcon: Icon(Icons.person),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isNameValid ? null : 'Invalid Name',
+                            ),
+                            onChanged: (v) => context.read<RegisterBloc>().add(NameChanged(v)),
+                          ),
                         ),
-                        _buildInputField(
-                          label: 'Email',
-                          icon: Icons.email,
-                          initialValue: state.email,
-                          onChanged: (v) =>
-                              context.read<RegisterBloc>().add(EmailChanged(v)),
-                          validator: (v) =>
-                          v!.isEmpty || !v.contains('@')
-                              ? 'Valid email required'
-                              : null,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TextFormField(
+                            initialValue: state.email,
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              prefixIcon: Icon(Icons.email),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isEmailValid ? null : 'Invalid Email',
+                            ),
+                            onChanged: (v) => context.read<RegisterBloc>().add(EmailChanged(v)),
+                          ),
                         ),
-                        _buildInputField(
-                          label: 'Phone',
-                          icon: Icons.phone,
-                          initialValue: state.phone,
-                          onChanged: (v) =>
-                              context.read<RegisterBloc>().add(PhoneChanged(v)),
-                          validator: (v) =>
-                          v!.isEmpty
-                              ? 'Phone required'
-                              : null,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TextFormField(
+                            initialValue: state.phone,
+                            decoration: InputDecoration(
+                              labelText: 'Phone',
+                              prefixIcon: Icon(Icons.phone),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isPhoneValid ? null : 'Invalid Phone',
+                            ),
+                            onChanged: (v) => context.read<RegisterBloc>().add(PhoneChanged(v)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TextFormField(
+                            controller: TextEditingController(text: state.dob),
+                            decoration: InputDecoration(
+                              labelText: 'Date of Birth',
+                              prefixIcon: Icon(Icons.calendar_today),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isDobValid ? null : 'Enter your date of birth',
+                            ),
+                            readOnly: true,
+                            onTap: () async {
+                              final d = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime(2000),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                              );
+                              if (d != null) {
+                                context.read<RegisterBloc>().add(DobChanged(d.toIso8601String().split('T')[0]));
+                              }
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text('Gender: '),
+                                  Radio<String>(
+                                    value: 'Male',
+                                    groupValue: state.gender,
+                                    onChanged: (v) => context.read<RegisterBloc>().add(GenderChanged(v!)),
+                                  ),
+                                  const Text('Male'),
+                                  Radio<String>(
+                                    value: 'Female',
+                                    groupValue: state.gender,
+                                    onChanged: (v) => context.read<RegisterBloc>().add(GenderChanged(v!)),
+                                  ),
+                                  const Text('Female'),
+                                ],
+                              ),
+                              if (!state.isGenderValid)
+                                const Text('Select gender', style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: DropdownButtonFormField2<String>(
+                            decoration: InputDecoration(
+                              labelText: 'Street',
+                              prefixIcon: Icon(Icons.streetview),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isStreetValid ? null : 'Select Street',
+                            ),
+                            isExpanded: true,
+                            items: ['Main Street', 'High Street', 'MG Road', 'Brigade Road']
+                                .map((i) => DropdownMenuItem<String>(value: i, child: Text(i)))
+                                .toList(),
+                            value: state.street.isEmpty ? null : state.street,
+                            onChanged: (v) => context.read<RegisterBloc>().add(StreetChanged(v!)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: DropdownButtonFormField2<String>(
+                            decoration: InputDecoration(
+                              labelText: 'State',
+                              prefixIcon: Icon(Icons.location_city),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isStateValid ? null : 'Select State',
+                            ),
+                            isExpanded: true,
+                            items: ['Tamil Nadu', 'Karnataka', 'Kerala', 'Andhra Pradesh']
+                                .map((i) => DropdownMenuItem<String>(value: i, child: Text(i)))
+                                .toList(),
+                            value: state.state.isEmpty ? null : state.state,
+                            onChanged: (v) => context.read<RegisterBloc>().add(StateChanged(v!)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: DropdownButtonFormField2<String>(
+                            decoration: InputDecoration(
+                              labelText: 'Country',
+                              prefixIcon: Icon(Icons.flag),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isCountryValid ? null : 'Select Country',
+                            ),
+                            isExpanded: true,
+                            items: ['India', 'USA', 'UK', 'Australia']
+                                .map((i) => DropdownMenuItem<String>(value: i, child: Text(i)))
+                                .toList(),
+                            value: state.country.isEmpty ? null : state.country,
+                            onChanged: (v) => context.read<RegisterBloc>().add(CountryChanged(v!)),
+                          ),
                         ),
                         TextFormField(
-                          readOnly: true,
-                          controller: TextEditingController(text: state.dob),
-                          decoration: _inputDecoration(
-                              'Date of Birth', Icons.calendar_today),
-                          onTap: () async {
-                            final d = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime(2000),
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime.now(),
-                            );
-                            if (d != null) context.read<RegisterBloc>().add(DobChanged(d.toIso8601String().split('T')[0]));
-                          },
-                          validator: (v) => v!.isEmpty ? 'DOB required' : null,
+                          initialValue: state.about,
+                          maxLength: 50,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            labelText: 'About Yourself',
+                            prefixIcon: Icon(Icons.info),
+                            filled: true,
+                            fillColor: Colors.grey.shade100,
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            errorText: state.isAboutValid ? null : 'Write about yourself',
+                          ),
+                          onChanged: (v) => context.read<RegisterBloc>().add(AboutChanged(v)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TextFormField(
+                            obscureText: !_isPasswordVisible,
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              prefixIcon: Icon(Icons.lock),
+                              suffixIcon: IconButton(
+                                icon: Icon(_isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                                onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isPasswordValid ? null : 'Password must be at least 8 characters',
+                            ),
+                            onChanged: (v) => context.read<RegisterBloc>().add(PasswordChanged(v)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: TextFormField(
+                            obscureText: !_isConfirmPasswordVisible,
+                            decoration: InputDecoration(
+                              labelText: 'Confirm Password',
+                              prefixIcon: Icon(Icons.lock),
+                              suffixIcon: IconButton(
+                                icon: Icon(_isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                                onPressed: () => setState(() => _isConfirmPasswordVisible = !_isConfirmPasswordVisible),
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey.shade100,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              errorText: state.isConfirmPasswordValid ? null : 'Passwords do not match',
+                            ),
+                            onChanged: (v) => context.read<RegisterBloc>().add(ConfirmPasswordChanged(v)),
+                          ),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                const Text('Gender: '),
-                                Radio<String>(
-                                  value: 'Male', groupValue: state.gender,
-                                  onChanged: (v) {
-                                    context.read<RegisterBloc>().add(
-                                        GenderChanged(v!));
-                                    setState(() => _genderError = false);
-                                  },
-                                ), const Text('Male'),
-                                Radio<String>(
-                                  value: 'Female', groupValue: state.gender,
-                                  onChanged: (v) {
-                                    context.read<RegisterBloc>().add(
-                                        GenderChanged(v!));
-                                    setState(() => _genderError = false);
-                                  },
-                                ), const Text('Female'),
+                                Checkbox(
+                                  value: state.termsAccepted,
+                                  onChanged: (v) => context.read<RegisterBloc>().add(TermsChanged(v!)),
+                                ),
+                                const Expanded(child: Text('I agree to the Terms and Conditions')),
                               ],
                             ),
-                            if (_genderError)
-                              const Padding(
-                                padding: EdgeInsets.only(left: 8),
-                                child: Text('Please select a gender',
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 12)),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        _buildDropdown(
-                          'Street', Icons.streetview,
-                          [
-                            'Main Street',
-                            'High Street',
-                            'MG Road',
-                            'Brigade Road'
-                          ],
-                          state.street,
-                              (v) =>
-                              context.read<RegisterBloc>().add(
-                                  StreetChanged(v!)),
-                        ),
-                        _buildDropdown(
-                          'State', Icons.location_city,
-                          [
-                            'Tamil Nadu',
-                            'Karnataka',
-                            'Kerala',
-                            'Andhra Pradesh'
-                          ],
-                          state.state,
-                              (v) =>
-                              context.read<RegisterBloc>().add(
-                                  StateChanged(v!)),
-                        ),
-                        _buildDropdown(
-                          'Country', Icons.flag,
-                          ['India', 'USA', 'UK', 'Australia'],
-                          state.country,
-                              (v) =>
-                              context.read<RegisterBloc>().add(
-                                  CountryChanged(v!)),
-                        ),
-                        const SizedBox(height: 12),
-                        TextFormField(
-                          initialValue: state.about,
-                          maxLength: 50,
-                          maxLines: null,
-                          decoration: _inputDecoration(
-                              'About Yourself', Icons.info),
-                          onChanged: (v) =>
-                              context.read<RegisterBloc>().add(AboutChanged(v)),
-                        ),
-                        _buildPasswordField(
-                          initialValue: state.password,
-                          onChanged: (v) =>
-                              context.read<RegisterBloc>().add(
-                                  PasswordChanged(v)),
-                          isVisible: _isPasswordVisible,
-                          toggle: () =>
-                              setState(() =>
-                              _isPasswordVisible = !_isPasswordVisible),
-                        ),
-                        _buildPasswordField(
-                          initialValue: state.password,
-                          onChanged: (_) {},
-                          isVisible: _isConfirmPasswordVisible,
-                          toggle: () =>
-                              setState(() =>
-                              _isConfirmPasswordVisible =
-                              !_isConfirmPasswordVisible),
-                          isConfirm: true,
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: state.termsAccepted,
-                              onChanged: (v) =>
-                                  context.read<RegisterBloc>().add(
-                                      TermsChanged(v!)),
-                            ),
-                            const Flexible(child: Text(
-                                'I agree to the terms and conditions')),
+                            if (!state.isTermsAccepted)
+                              const Text('You must accept the terms', style: TextStyle(color: Colors.red)),
                           ],
                         ),
                         const SizedBox(height: 20),
@@ -299,30 +365,22 @@ class _RegisterFormState extends State<RegisterForm> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              final valid = _formKey.currentState!.validate();
-                              final genderOk = state.gender.isNotEmpty;
-                              setState(() => _genderError = !genderOk);
-                              if (valid && genderOk && state.termsAccepted) {
-                                context.read<RegisterBloc>().add(
-                                    SubmitRegister());
-                              } else if (!state.termsAccepted) {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<RegisterBloc>().add(SubmitRegister());
+                              } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text(
-                                        'Please accept terms and conditions'))
+                                  const SnackBar(content: Text('Please fill in the fields correctly!')),
                                 );
                               }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.deepPurple,
                               padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
-                            child: const Text('Register',
-                                style: TextStyle(color: Colors.white)),
+                            child: const Text('Register', style: TextStyle(color: Colors.white)),
                           ),
                         ),
-                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
@@ -330,120 +388,20 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
             ),
             if (state.formStatus is FormSubmitting)
-              Container(
-                color: Colors.black.withOpacity(0.5),
-                child: const Center(
-                  child: SpinKitFadingCircle(color: Colors.white, size: 50),
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black.withOpacity(0.3),
+                  child: Center(
+                    child: SpinKitCircle(
+                      color: Colors.deepPurple,
+                      size: 50.0,
+                    ),
+                  ),
                 ),
-              ),
+              )
           ],
         );
       },
     );
   }
-
-  Padding _buildInputField({
-    required String label,
-    required IconData icon,
-    required String? initialValue,
-    required ValueChanged<String> onChanged,
-    String? Function(String?)? validator,
-  }) =>
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: TextFormField(
-          initialValue: initialValue,
-          decoration: _inputDecoration(label, icon),
-          onChanged: onChanged,
-          validator: validator,
-        ),
-      );
-
-  Padding _buildDropdown(
-      String label,
-      IconData icon,
-      List<String> items,
-      String current,
-      ValueChanged<String?> onChanged,
-      ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButtonFormField2<String>(
-          decoration: _inputDecoration(label, icon),
-          isExpanded: true,
-          buttonStyleData: ButtonStyleData(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            height: 30,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          iconStyleData: const IconStyleData(
-            icon: Icon(Icons.arrow_drop_down, color: Colors.deepPurple),
-            iconSize: 24,
-          ),
-          dropdownStyleData: DropdownStyleData(
-            maxHeight: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 8,
-          ),
-          items: items
-              .map((i) => DropdownMenuItem<String>(
-            value: i,
-            child: Text(i, style: const TextStyle(fontSize: 16)),
-          ))
-              .toList(),
-          value: current.isEmpty ? null : current,
-          onChanged: onChanged,
-          validator: (v) =>
-          (v == null || v.isEmpty) ? '$label is required' : null,
-        ),
-      ),
-    );
-  }
-  Padding _buildPasswordField({
-    required String? initialValue,
-    required ValueChanged<String> onChanged,
-    required bool isVisible,
-    required VoidCallback toggle,
-    bool isConfirm = false,
-  }) =>
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: TextFormField(
-          obscureText: !isVisible,
-          initialValue: initialValue,
-          decoration: InputDecoration(
-            labelText: isConfirm ? 'Confirm Password' : 'Password',
-            prefixIcon: const Icon(Icons.lock),
-            filled: true,
-            fillColor: Colors.grey.shade100,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            suffixIcon: IconButton(
-              icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off),
-              onPressed: toggle,
-            ),
-          ),
-          onChanged: onChanged,
-          validator: (v) {
-            if (isConfirm)
-              return v != initialValue ? 'Passwords do not match' : null;
-            return v == null || v.isEmpty ? 'Password is required' : null;
-          },
-        ),
-      );
-
-  InputDecoration _inputDecoration(String label, IconData icon) =>
-      InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        filled: true,
-        fillColor: Colors.grey.shade100,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      );
 }

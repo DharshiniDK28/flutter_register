@@ -20,9 +20,15 @@ class FormSubmitting extends FormSubmissionStatus{
     const FormSubmitting();
 }
 
-class SubmissionSuccess extends FormSubmissionStatus{
-    const SubmissionSuccess();
+class SubmissionSuccess extends FormSubmissionStatus {
+  final String message;
+
+  const SubmissionSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }
+
 class SubmissionFailed extends  FormSubmissionStatus {
   final Object exception;
 
